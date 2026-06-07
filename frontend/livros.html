@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livros - Biblioteca Web</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+    <div class="logo">
+        📚 Biblioteca Web
+    </div>
+
+    <nav id="menu"></nav>
+</header>
+
+<main class="livros-container">
+
+    <h1>Acervo da Biblioteca</h1>
+
+    <p class="livros-descricao">
+        Consulte os livros disponíveis para empréstimo.
+    </p>
+
+    <table class="tabela-livros">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Categoria</th>
+                <th>Disponível</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabelaLivros">
+        </tbody>
+    </table>
+
+</main>
+
+<footer>
+    <p>Projeto Biblioteca Web - Desenvolvimento de Aplicações Web</p>
+</footer>
+
+<script>
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    const perfilUsuario = localStorage.getItem("perfilUsuario");
+    const menu = document.getElementById("menu");
+
+    if (usuarioLogado) {
+        menu.innerHTML = `
+            <a href="index.html">Início</a>
+            <a href="livros.html">Livros</a>
+            <a href="meus-emprestimos.html">Meus Empréstimos</a>
+            ${
+                perfilUsuario === "ADMIN"
+                    ? '<a href="admin.html">Admin</a>'
+                    : ''
+            }
+            <a href="#" onclick="sair()">Sair</a>
+        `;
+    } else {
+        menu.innerHTML = `
+            <a href="index.html">Início</a>
+            <a href="livros.html">Livros</a>
+            <a href="login.html">Login</a>
+        `;
+    }
+
+    function sair() {
+        localStorage.clear();
+        alert("Você saiu do sistema.");
+        window.location.href = "login.html";
+    }
+
+    function carregarLivros() {
+        fetch("http://localhost:8080/livros")
+            .then(response => response.json())
+            .then(livros => {
+                const tabela = document.getElementById("tabelaLivros");
+
+                tabela.innerHTML = "";
+
+                livros.forEach(livro => {
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${livro.titulo}</td>
+                            <td>${livro.autor}</td>
+                            <td>${livro.categoria}</td>
+                            <td>${livro.disponivel ? "Sim" : "Não"}</td>
+                            <td>
+                                ${
+                                    livro.disponivel
+                                    ? `
+                                        <button class="btn-solicitar" onclick="solicitarEmprestimo('${livro.titulo}')">
+                                            Solicitar
+                                        </button>
+                                    `
+                                    : "Indisponível"
+                                }
+                            </td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error("Erro ao carregar livros:", error);
+                alert("Erro ao carregar livros. Verifique se o backend está rodando.");
+            });
+    }
+
+    function solicitarEmprestimo(tituloLivro) {
+
+        const nomeUsuario = localStorage.getItem("usuarioLogado");
+
+        if (!nomeUsuario) {
+            alert("Faça login para solicitar empréstimos.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const solicitacao = {
+            nomeUsuario: nomeUsuario,
+            tituloLivro: tituloLivro
+        };
+
+        fetch("http://localhost:8080/solicitacoes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(solicitacao)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao enviar solicitação.");
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            alert("Solicitação de empréstimo enviada com sucesso!");
+            console.log("Solicitação cadastrada:", data);
+        })
+        .catch(error => {
+            console.error("Erro ao solicitar empréstimo:", error);
+            alert("Erro ao solicitar empréstimo. Verifique se o backend está rodando.");
+        });
+    }
+
+    carregarLivros();
+</script>
+
+</body>
+</html>

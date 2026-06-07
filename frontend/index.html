@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Web</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+    <div class="logo">
+        📚 Biblioteca Web
+    </div>
+
+    <nav id="menu">
+    </nav>
+</header>
+
+<main class="principal">
+    <section class="conteudo-inicial">
+        <h1>Sistema Web de Biblioteca</h1>
+
+        <p>
+            Gerencie livros, empréstimos, devoluções e solicitações de forma
+            simples, organizada e segura.
+        </p>
+
+        <div class="botoes">
+            <a href="login.html" class="btn-principal">Entrar no Sistema</a>
+            <a href="livros.html" class="btn-secundario">Ver Livros</a>
+        </div>
+    </section>
+
+    <section class="card-info">
+        <h2>Funcionalidades</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>📖 Livros</h3>
+                <p>Consulte os livros disponíveis no acervo da biblioteca.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔄 Empréstimos</h3>
+                <p>Solicite empréstimos e acompanhe seus livros alugados.</p>
+            </div>
+
+            <div class="card">
+                <h3>🔐 Segurança</h3>
+                <p>Acesso com login e controle de perfil de usuário.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>Projeto Biblioteca Web - Desenvolvimento de Aplicações Web</p>
+</footer>
+
+<script>
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    const perfilUsuario = localStorage.getItem("perfilUsuario");
+    const menu = document.getElementById("menu");
+
+    if (usuarioLogado) {
+        menu.innerHTML = `
+            <a href="index.html">Início</a>
+            <a href="livros.html">Livros</a>
+            <a href="meus-emprestimos.html">Meus Empréstimos</a>
+            ${
+                perfilUsuario === "ADMIN"
+                    ? '<a href="admin.html">Admin</a>'
+                    : ''
+            }
+            <a href="#" onclick="sair()">Sair</a>
+        `;
+    } else {
+        menu.innerHTML = `
+            <a href="index.html">Início</a>
+            <a href="livros.html">Livros</a>
+            <a href="login.html">Login</a>
+        `;
+    }
+
+    function sair() {
+        localStorage.clear();
+        alert("Você saiu do sistema.");
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

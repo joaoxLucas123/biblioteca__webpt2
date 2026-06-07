@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Biblioteca Web</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<script>
+    const perfil = localStorage.getItem("perfilUsuario");
+
+    if (perfil !== "ADMIN") {
+        alert("Acesso negado. Faça login como administrador.");
+        window.location.href = "login.html";
+    }
+</script>
+
+<header class="cabecalho">
+    <div class="logo">
+        📚 Biblioteca Web
+    </div>
+
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="livros.html">Livros</a>
+        <a href="meus-emprestimos.html">Meus Empréstimos</a>
+        <a href="admin.html">Admin</a>
+        <a href="login.html">Login</a>
+    </nav>
+</header>
+
+<main class="livros-container">
+
+    <h1>Painel Administrativo</h1>
+
+    <p class="livros-descricao">
+        Gerencie livros cadastrados e aprove ou recuse solicitações de empréstimo.
+    </p>
+
+    <h2>Cadastrar Novo Livro</h2>
+
+    <div class="form-admin">
+        <input type="hidden" id="idLivro">
+
+        <input type="text" id="tituloLivro" placeholder="Título do livro">
+        <input type="text" id="autorLivro" placeholder="Autor">
+        <input type="text" id="categoriaLivro" placeholder="Categoria">
+
+        <button class="btn-solicitar" onclick="salvarLivro()">
+            Salvar Livro
+        </button>
+
+        <button class="btn-recusar" onclick="limparFormularioLivro()">
+            Cancelar
+        </button>
+    </div>
+
+    <br><br>
+
+    <h2>Livros Cadastrados</h2>
+
+    <table class="tabela-livros">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Categoria</th>
+            <th>Disponível</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody id="tabelaLivrosAdmin">
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <h2>Solicitações de Empréstimo</h2>
+
+    <table class="tabela-livros">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Livro</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody id="tabelaSolicitacoesAdmin">
+        </tbody>
+    </table>
+
+</main>
+
+<footer>
+    <p>Projeto Biblioteca Web - Desenvolvimento de Aplicações Web</p>
+</footer>
+
+<script>
+    function classeStatus(status) {
+        if (status === "APROVADO") {
+            return "status-aprovado";
+        }
+
+        if (status === "RECUSADO") {
+            return "status-recusado";
+        }
+
+        return "status-pendente";
+    }
+
+    function carregarLivrosAdmin() {
+        fetch("http://localhost:8080/livros")
+            .then(response => response.json())
+            .then(livros => {
+                const tabela = document.getElementById("tabelaLivrosAdmin");
+                tabela.innerHTML = "";
+
+                livros.forEach(livro => {
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${livro.id}</td>
+                            <td>${livro.titulo}</td>
+                            <td>${livro.autor}</td>
+                            <td>${livro.categoria}</td>
+                            <td>${livro.disponivel ? "Sim" : "Não"}</td>
+                            <td>
+                                <button class="btn-solicitar" onclick="prepararEdicaoLivro(${livro.id}, '${livro.titulo}', '${livro.autor}', '${livro.categoria}', ${livro.disponivel})">
+                                    Editar
+                                </button>
+
+                                <button class="btn-recusar" onclick="excluirLivro(${livro.id})">
+                                    Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error("Erro ao carregar livros:", error);
+            });
+    }
+
+    function salvarLivro() {
+        const id = document.getElementById("idLivro").value;
+        const titulo = document.getElementById("tituloLivro").value;
+        const autor = document.getElementById("autorLivro").value;
+        const categoria = document.getElementById("categoriaLivro").value;
+
+        if (!titulo || !autor || !categoria) {
+            alert("Preencha todos os campos do livro.");
+            return;
+        }
+
+        const livro = {
+            titulo: titulo,
+            autor: autor,
+            categoria: categoria,
+            disponivel: true
+        };
+
+        let url = "http://localhost:8080/livros";
+        let metodo = "POST";
+
+        if (id) {
+            url = `http://localhost:8080/livros/${id}`;
+            metodo = "PUT";
+        }
+
+        fetch(url, {
+            method: metodo,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(livro)
+        })
+        .then(response => response.json())
+        .then(() => {
+            alert(id ? "Livro atualizado com sucesso!" : "Livro cadastrado com sucesso!");
+            limparFormularioLivro();
+            carregarLivrosAdmin();
+        })
+        .catch(error => {
+            console.error("Erro ao salvar livro:", error);
+            alert("Erro ao salvar livro.");
+        });
+    }
+
+    function prepararEdicaoLivro(id, titulo, autor, categoria, disponivel) {
+        document.getElementById("idLivro").value = id;
+        document.getElementById("tituloLivro").value = titulo;
+        document.getElementById("autorLivro").value = autor;
+        document.getElementById("categoriaLivro").value = categoria;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+    function limparFormularioLivro() {
+        document.getElementById("idLivro").value = "";
+        document.getElementById("tituloLivro").value = "";
+        document.getElementById("autorLivro").value = "";
+        document.getElementById("categoriaLivro").value = "";
+    }
+
+    function excluirLivro(id) {
+        const confirmar = confirm("Tem certeza que deseja excluir este livro?");
+
+        if (!confirmar) {
+            return;
+        }
+
+        fetch(`http://localhost:8080/livros/${id}`, {
+            method: "DELETE"
+        })
+        .then(() => {
+            alert("Livro excluído com sucesso!");
+            carregarLivrosAdmin();
+        })
+        .catch(error => {
+            console.error("Erro ao excluir livro:", error);
+            alert("Erro ao excluir livro.");
+        });
+    }
+
+    function carregarSolicitacoesAdmin() {
+        fetch("http://localhost:8080/solicitacoes")
+            .then(response => response.json())
+            .then(solicitacoes => {
+                const tabela = document.getElementById("tabelaSolicitacoesAdmin");
+                tabela.innerHTML = "";
+
+                solicitacoes.forEach(solicitacao => {
+                    const status = solicitacao.status ? solicitacao.status : "PENDENTE";
+
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${solicitacao.id}</td>
+                            <td>${solicitacao.nomeUsuario}</td>
+                            <td>${solicitacao.tituloLivro}</td>
+                            <td>${solicitacao.dataSolicitacao}</td>
+                            <td class="${classeStatus(status)}">${status}</td>
+                            <td>
+                                ${
+                                    status === "PENDENTE"
+                                    ? `
+                                        <button class="btn-solicitar" onclick="aprovarSolicitacao(${solicitacao.id})">
+                                            Aprovar
+                                        </button>
+
+                                        <button class="btn-recusar" onclick="recusarSolicitacao(${solicitacao.id})">
+                                            Recusar
+                                        </button>
+                                    `
+                                    : "Finalizado"
+                                }
+                            </td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error("Erro ao carregar solicitações:", error);
+            });
+    }
+
+    function aprovarSolicitacao(id) {
+        fetch(`http://localhost:8080/solicitacoes/${id}/aprovar`, {
+            method: "PUT"
+        })
+        .then(response => response.json())
+        .then(() => {
+            alert("Solicitação aprovada com sucesso!");
+            carregarSolicitacoesAdmin();
+            carregarLivrosAdmin();
+        })
+        .catch(error => {
+            console.error("Erro ao aprovar solicitação:", error);
+            alert("Erro ao aprovar solicitação.");
+        });
+    }
+
+    function recusarSolicitacao(id) {
+        fetch(`http://localhost:8080/solicitacoes/${id}/recusar`, {
+            method: "PUT"
+        })
+        .then(response => response.json())
+        .then(() => {
+            alert("Solicitação recusada com sucesso!");
+            carregarSolicitacoesAdmin();
+        })
+        .catch(error => {
+            console.error("Erro ao recusar solicitação:", error);
+            alert("Erro ao recusar solicitação.");
+        });
+    }
+
+    carregarLivrosAdmin();
+    carregarSolicitacoesAdmin();
+</script>
+
+</body>
+</html>

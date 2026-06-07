@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Empréstimos - Biblioteca Web</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<script>
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+    const perfilUsuario = localStorage.getItem("perfilUsuario");
+
+    if (!usuarioLogado) {
+        alert("Faça login para acessar seus empréstimos.");
+        window.location.href = "login.html";
+    }
+</script>
+
+<header class="cabecalho">
+    <div class="logo">
+        📚 Biblioteca Web
+    </div>
+
+    <nav id="menu"></nav>
+</header>
+
+<main class="livros-container">
+
+    <h1>Minhas Solicitações</h1>
+
+    <p class="livros-descricao">
+        Acompanhe os livros solicitados para empréstimo.
+    </p>
+
+    <table class="tabela-livros">
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Livro</th>
+                <th>Data da Solicitação</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabelaSolicitacoes">
+        </tbody>
+    </table>
+
+</main>
+
+<footer>
+    <p>Projeto Biblioteca Web - Desenvolvimento de Aplicações Web</p>
+</footer>
+
+<script>
+    const menu = document.getElementById("menu");
+
+    menu.innerHTML = `
+        <a href="index.html">Início</a>
+        <a href="livros.html">Livros</a>
+        <a href="meus-emprestimos.html">Meus Empréstimos</a>
+        ${
+            perfilUsuario === "ADMIN"
+                ? '<a href="admin.html">Admin</a>'
+                : ''
+        }
+        <a href="#" onclick="sair()">Sair</a>
+    `;
+
+    function sair() {
+        localStorage.clear();
+        alert("Você saiu do sistema.");
+        window.location.href = "login.html";
+    }
+
+    function classeStatus(status) {
+        if (status === "APROVADO") {
+            return "status-aprovado";
+        }
+
+        if (status === "RECUSADO") {
+            return "status-recusado";
+        }
+
+        return "status-pendente";
+    }
+
+    function carregarSolicitacoes() {
+        fetch("http://localhost:8080/solicitacoes")
+            .then(response => response.json())
+            .then(solicitacoes => {
+
+                const tabela = document.getElementById("tabelaSolicitacoes");
+                tabela.innerHTML = "";
+
+                let solicitacoesFiltradas = solicitacoes;
+
+                if (perfilUsuario !== "ADMIN") {
+                    solicitacoesFiltradas = solicitacoes.filter(solicitacao =>
+                        solicitacao.nomeUsuario === usuarioLogado
+                    );
+                }
+
+                if (solicitacoesFiltradas.length === 0) {
+                    tabela.innerHTML = `
+                        <tr>
+                            <td colspan="4">Nenhuma solicitação encontrada.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                solicitacoesFiltradas.forEach(solicitacao => {
+
+                    const status = solicitacao.status
+                        ? solicitacao.status
+                        : "PENDENTE";
+
+                    tabela.innerHTML += `
+                        <tr>
+                            <td>${solicitacao.nomeUsuario}</td>
+                            <td>${solicitacao.tituloLivro}</td>
+                            <td>${solicitacao.dataSolicitacao}</td>
+                            <td class="${classeStatus(status)}">${status}</td>
+                        </tr>
+                    `;
+                });
+
+            })
+            .catch(error => {
+                console.error("Erro ao carregar solicitações:", error);
+                alert("Erro ao carregar solicitações. Verifique se o backend está rodando.");
+            });
+    }
+
+    carregarSolicitacoes();
+</script>
+
+</body>
+</html>

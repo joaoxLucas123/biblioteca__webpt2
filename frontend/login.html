@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Biblioteca Web</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+    <div class="logo">
+        📚 Biblioteca Web
+    </div>
+
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="livros.html">Livros</a>
+        <a href="meus-emprestimos.html">Meus Empréstimos</a>
+        <a href="admin.html">Admin</a>
+        <a href="login.html">Login</a>
+    </nav>
+</header>
+
+<main class="login-container">
+    <section class="login-card">
+        <h1>Entrar no Sistema</h1>
+
+        <p class="login-descricao">
+            Acesse sua conta para solicitar empréstimos ou gerenciar a biblioteca.
+        </p>
+
+        <form>
+            <div class="campo">
+                <label for="login">Usuário</label>
+                <input type="text" id="login" placeholder="Digite seu usuário">
+            </div>
+
+            <div class="campo">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="Digite sua senha">
+            </div>
+
+            <button type="button" class="btn-login" onclick="fazerLogin()">
+                Entrar
+            </button>
+        </form>
+
+        <p class="login-info">
+            Usuário: aluno | Senha: 123<br>
+            Admin: bibliotecario | Senha: 123
+        </p>
+    </section>
+</main>
+
+<footer>
+    <p>Projeto Biblioteca Web - Desenvolvimento de Aplicações Web</p>
+</footer>
+
+<script>
+    function fazerLogin() {
+        const usuario = document.getElementById("login").value;
+        const senha = document.getElementById("senha").value;
+
+        if (usuario === "aluno" && senha === "123") {
+            localStorage.setItem("usuarioLogado", "aluno");
+            localStorage.setItem("perfilUsuario", "ALUNO");
+
+            alert("Login realizado com sucesso!");
+            window.location.href = "livros.html";
+            return;
+        }
+
+        if (usuario === "bibliotecario" && senha === "123") {
+            localStorage.setItem("usuarioLogado", "bibliotecario");
+            localStorage.setItem("perfilUsuario", "ADMIN");
+
+            alert("Login de administrador realizado com sucesso!");
+            window.location.href = "admin.html";
+            return;
+        }
+
+        alert("Usuário ou senha inválidos.");
+    }
+</script>
+
+</body>
+</html>
