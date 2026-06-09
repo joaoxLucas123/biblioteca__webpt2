@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Empréstimos - Biblioteca Web</title>
 
+    <!-- Importa o arquivo de estilos CSS responsável pela aparência da página -->
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,12 +26,18 @@
         📚 Biblioteca Web
     </div>
 
+    <!-- Menu de navegação que será preenchido dinamicamente pelo JavaScript -->
+
     <nav id="menu"></nav>
 </header>
 
 <main class="livros-container">
 
+    <!-- Título principal da página -->
+
     <h1>Minhas Solicitações</h1>
+
+    <!-- Texto explicativo informando a finalidade da página -->
 
     <p class="livros-descricao">
         Acompanhe os livros solicitados para empréstimo.
@@ -45,6 +53,10 @@
             </tr>
         </thead>
 
+        <!-- Corpo da tabela.
+         Será preenchido automaticamente pelo JavaScript com os dados
+         recebidos do back-end através da API. -->
+         
         <tbody id="tabelaSolicitacoes">
         </tbody>
     </table>

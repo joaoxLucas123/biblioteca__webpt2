@@ -33,7 +33,15 @@
 </header>
 
 <main class="livros-container">
+<!--
+    Painel administrativo do sistema.
 
+    Nesta seção o administrador pode:
+    - Cadastrar novos livros;
+    - Editar ou excluir livros já cadastrados;
+    - Visualizar todos os livros do sistema;
+    - Aprovar ou recusar solicitações de empréstimo feitas pelos usuários.
+-->
     <h1>Painel Administrativo</h1>
 
     <p class="livros-descricao">
@@ -116,7 +124,7 @@
 
         return "status-pendente";
     }
-
+<!-- Função para carregar um determinado livro da tabela livros admin -->
     function carregarLivrosAdmin() {
         fetch("http://localhost:8080/livros")
             .then(response => response.json())
@@ -149,7 +157,7 @@
                 console.error("Erro ao carregar livros:", error);
             });
     }
-
+<!-- Função para salvar dados de um determinado livro -->
     function salvarLivro() {
         const id = document.getElementById("idLivro").value;
         const titulo = document.getElementById("tituloLivro").value;
@@ -194,7 +202,7 @@
             alert("Erro ao salvar livro.");
         });
     }
-
+<!-- Função para editar um determinado livro -->
     function prepararEdicaoLivro(id, titulo, autor, categoria, disponivel) {
         document.getElementById("idLivro").value = id;
         document.getElementById("tituloLivro").value = titulo;
@@ -206,14 +214,14 @@
             behavior: "smooth"
         });
     }
-
+<!-- Função para limpar os dados de um determinado livro -->
     function limparFormularioLivro() {
         document.getElementById("idLivro").value = "";
         document.getElementById("tituloLivro").value = "";
         document.getElementById("autorLivro").value = "";
         document.getElementById("categoriaLivro").value = "";
     }
-
+<!-- Função para excluir um determinado livro -->
     function excluirLivro(id) {
         const confirmar = confirm("Tem certeza que deseja excluir este livro?");
 
@@ -233,7 +241,7 @@
             alert("Erro ao excluir livro.");
         });
     }
-
+<!-- Carrega as solicitações na aba admin -->
     function carregarSolicitacoesAdmin() {
         fetch("http://localhost:8080/solicitacoes")
             .then(response => response.json())
@@ -274,7 +282,7 @@
                 console.error("Erro ao carregar solicitações:", error);
             });
     }
-
+<!--Aprova uma solicitação de empréstimo feita pelo usuário-->
     function aprovarSolicitacao(id) {
         fetch(`http://localhost:8080/solicitacoes/${id}/aprovar`, {
             method: "PUT"
@@ -290,7 +298,7 @@
             alert("Erro ao aprovar solicitação.");
         });
     }
-
+<!-- Recusa uma solicitação de empréstimo feita pelo usuário-->
     function recusarSolicitacao(id) {
         fetch(`http://localhost:8080/solicitacoes/${id}/recusar`, {
             method: "PUT"

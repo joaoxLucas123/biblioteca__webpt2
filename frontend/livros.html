@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livros - Biblioteca Web</title>
 
+    <!-- Importa o arquivo CSS responsável pela estilização da página -->
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -14,18 +16,29 @@
         📚 Biblioteca Web
     </div>
 
+    <!-- Área onde o menu de navegação será carregado dinamicamente pelo JavaScript -->
+
     <nav id="menu"></nav>
 </header>
 
 <main class="livros-container">
 
+    <!-- Título principal da página de consulta de livros -->
+
     <h1>Acervo da Biblioteca</h1>
+
+    <!-- Texto explicativo informando o objetivo da página -->
 
     <p class="livros-descricao">
         Consulte os livros disponíveis para empréstimo.
     </p>
 
+    <!-- Tabela responsável por exibir os livros cadastrados no sistema -->
+
     <table class="tabela-livros">
+
+        <!-- Cabeçalho da tabela -->
+
         <thead>
             <tr>
                 <th>Título</th>
@@ -36,6 +49,8 @@
             </tr>
         </thead>
 
+        <!-- Corpo da tabela, preenchido dinamicamente pelo JavaScript com os dados vindos do back-end -->
+        
         <tbody id="tabelaLivros">
         </tbody>
     </table>

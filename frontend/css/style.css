@@ -1,18 +1,28 @@
+/* ==================================================
+   RESET GERAL DA PÁGINA
+   Remove margens e espaçamentos padrões do navegador
+================================================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* ==================================================
+   CONFIGURAÇÕES GERAIS DO SITE
+================================================== */
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f4f6f9;
     color: #333;
+    min-height: 100vh;
 }
 
-/* ========================= */
-/* CABEÇALHO */
-/* ========================= */
+/* ==================================================
+   CABEÇALHO E MENU DE NAVEGAÇÃO
+================================================== */
 
 .cabecalho {
     background-color: #1e3a8a;
@@ -22,11 +32,18 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .logo {
     font-size: 28px;
     font-weight: bold;
+    transition: 0.3s;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 nav a {
@@ -40,9 +57,9 @@ nav a:hover {
     color: #93c5fd;
 }
 
-/* ========================= */
-/* PÁGINA INICIAL */
-/* ========================= */
+/* ==================================================
+   PÁGINA INICIAL
+================================================== */
 
 .principal {
     text-align: center;
@@ -61,12 +78,19 @@ nav a:hover {
     margin-bottom: 30px;
 }
 
-/* ========================= */
-/* BOTÕES */
-/* ========================= */
+/* ==================================================
+   BOTÕES DO SISTEMA
+================================================== */
 
 .botoes {
     margin-top: 30px;
+}
+
+.btn-principal,
+.btn-secundario,
+.btn-login,
+.btn-solicitar {
+    transition: 0.3s;
 }
 
 .btn-principal,
@@ -99,9 +123,9 @@ nav a:hover {
     color: white;
 }
 
-/* ========================= */
-/* CARDS */
-/* ========================= */
+/* ==================================================
+   CARDS DE FUNCIONALIDADES
+================================================== */
 
 .card-info {
     margin-top: 80px;
@@ -126,6 +150,12 @@ nav a:hover {
     border-radius: 10px;
 
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 .card h3 {
@@ -133,9 +163,9 @@ nav a:hover {
     color: #1e3a8a;
 }
 
-/* ========================= */
-/* LOGIN */
-/* ========================= */
+/* ==================================================
+   TELA DE LOGIN
+================================================== */
 
 .login-container {
     display: flex;
@@ -200,7 +230,6 @@ nav a:hover {
 
     font-size: 16px;
     font-weight: bold;
-
     cursor: pointer;
 }
 
@@ -215,20 +244,9 @@ nav a:hover {
     font-size: 14px;
 }
 
-/* ========================= */
-/* RODAPÉ */
-/* ========================= */
-
-footer {
-    margin-top: 80px;
-    background-color: #1e3a8a;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-/* ========================= */
-/* TELA DE LIVROS */
-/* ========================= */
+/* ==================================================
+   TELA DE LIVROS E TABELAS
+================================================== */
 
 .livros-container {
     padding: 50px;
@@ -255,6 +273,7 @@ footer {
     overflow: hidden;
 
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
 }
 
 .tabela-livros th {
@@ -269,9 +288,17 @@ footer {
     border-bottom: 1px solid #ddd;
 }
 
+.tabela-livros tr {
+    transition: 0.2s;
+}
+
 .tabela-livros tr:hover {
     background-color: #f5f5f5;
 }
+
+/* ==================================================
+   BOTÕES DE AÇÃO
+================================================== */
 
 .btn-solicitar {
     background-color: #16a34a;
@@ -288,67 +315,18 @@ footer {
 .btn-solicitar:hover {
     background-color: #15803d;
 }
-/* ========================= */
-/* MELHORIAS VISUAIS */
-/* ========================= */
 
-body {
-    min-height: 100vh;
-}
-
-.cabecalho {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.logo {
-    transition: 0.3s;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-}
-
-.card {
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-.btn-principal,
-.btn-secundario,
-.btn-login,
-.btn-solicitar {
-    transition: 0.3s;
-}
-
-.tabela-livros {
-    margin-top: 20px;
-}
-
-.tabela-livros tr {
-    transition: 0.2s;
-}
-
-h2 {
-    color: #1e3a8a;
-    margin-bottom: 20px;
-}
-
-footer {
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-}
 .btn-recusar {
     background-color: #dc2626;
     color: white;
+
     border: none;
     border-radius: 6px;
+
     padding: 10px 15px;
     cursor: pointer;
     font-weight: bold;
+
     margin-left: 8px;
     transition: 0.3s;
 }
@@ -356,6 +334,11 @@ footer {
 .btn-recusar:hover {
     background-color: #b91c1c;
 }
+
+/* ==================================================
+   STATUS DAS SOLICITAÇÕES
+================================================== */
+
 .status-pendente {
     color: #ca8a04;
     font-weight: bold;
@@ -369,4 +352,18 @@ footer {
 .status-recusado {
     color: #dc2626;
     font-weight: bold;
+}
+
+/* ==================================================
+   RODAPÉ DO SISTEMA
+================================================== */
+
+footer {
+    margin-top: 80px;
+    background-color: #1e3a8a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
 }

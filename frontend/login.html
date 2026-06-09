@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Biblioteca Web</title>
 
+    <!-- Importa o arquivo CSS responsável pela estilização da página -->
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,6 +15,8 @@
     <div class="logo">
         📚 Biblioteca Web
     </div>
+
+    <!-- Menu de navegação principal do sistema -->
 
     <nav>
         <a href="index.html">Início</a>
@@ -27,30 +31,46 @@
     <section class="login-card">
         <h1>Entrar no Sistema</h1>
 
+        <!-- Descrição exibida abaixo do título da tela de login -->
+
         <p class="login-descricao">
             Acesse sua conta para solicitar empréstimos ou gerenciar a biblioteca.
         </p>
 
+        <!-- Formulário utilizado para realizar o login no sistema -->
+
         <form>
+             
+            <!-- Campo para informar o nome de usuário -->
+
             <div class="campo">
                 <label for="login">Usuário</label>
                 <input type="text" id="login" placeholder="Digite seu usuário">
             </div>
+
+            <!-- Campo para informar a senha do usuário -->
 
             <div class="campo">
                 <label for="senha">Senha</label>
                 <input type="password" id="senha" placeholder="Digite sua senha">
             </div>
 
+            <!-- Botão responsável por chamar a função JavaScript que realiza o login -->
+
             <button type="button" class="btn-login" onclick="fazerLogin()">
                 Entrar
             </button>
         </form>
 
+        <!-- Informações de acesso utilizadas para demonstração do sistema -->
+
         <p class="login-info">
             Usuário: aluno | Senha: 123<br>
             Admin: bibliotecario | Senha: 123
         </p>
+        
+        <!-- Fechamento da seção principal da página -->
+
     </section>
 </main>
 
